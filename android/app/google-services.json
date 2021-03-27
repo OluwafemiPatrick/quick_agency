@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "project_number": "822321076894",
+    "firebase_url": "https://quickseen-d0404-default-rtdb.firebaseio.com",
+    "project_id": "quickseen-d0404",
+    "storage_bucket": "quickseen-d0404.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822321076894:android:2965533f82b39b233c798f",
+        "android_client_info": {
+          "package_name": "com.quickseen.agency"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822321076894-4u1n6k5c912lpgdmd0r90faetbmct2c4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quickseen.agency",
+            "certificate_hash": "77aedab3f44a620d686ce5f98832a0f9bbf7a1f0"
+          }
+        },
+        {
+          "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpG4Sve-fb3ipDneDbs-VYLnYI8DDamKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822321076894:android:28de6b514d1ef3113c798f",
+        "android_client_info": {
+          "package_name": "com.quickseen.rider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822321076894-s8erb8hb904e3mesublcis53brt5lf46.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quickseen.rider",
+            "certificate_hash": "833b203988960eb7e775e57265c4615cb137f63d"
+          }
+        },
+        {
+          "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpG4Sve-fb3ipDneDbs-VYLnYI8DDamKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822321076894:android:13d7a82ff3d060133c798f",
+        "android_client_info": {
+          "package_name": "com.quickseen.vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822321076894-rsk6ituroh5q10bothci9hn8em2mfo7l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quickseen.vendor",
+            "certificate_hash": "833b203988960eb7e775e57265c4615cb137f63d"
+          }
+        },
+        {
+          "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpG4Sve-fb3ipDneDbs-VYLnYI8DDamKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
