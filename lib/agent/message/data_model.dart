@@ -1,10 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageData {
-  String chatId, riderName, senderName, date, time, senderProfileUrl;
+  String chatId, senderName, senderProfileUrl, senderUId, receiverName, receiverProfileUrl, receiverUId, date, time, message;
 
-  MessageData(this.chatId, this.riderName, this.senderName, this.date,
-      this.time, this.senderProfileUrl);
+  MessageData(
+      this.chatId,
+      this.senderName,
+      this.senderProfileUrl,
+      this.senderUId,
+      this.receiverName,
+      this.receiverProfileUrl,
+      this.receiverUId,
+      this.date,
+      this.time,
+      this.message );
 
 }
 
@@ -14,9 +23,8 @@ class LiveChatData {
   final String message;
   final String time;
   final String date;
-  final String profileImageUrl;
-  final String senderName;
-  final String senderId;
+  final String senderUId;
+  final String receiverUId;
 
   final DocumentReference reference;
 
@@ -24,16 +32,15 @@ class LiveChatData {
       : assert(map['message'] != null),
         assert(map['time'] != null),
         assert(map['date'] != null),
-        assert(map['profileImageUrl'] != null),
-        assert(map['senderName'] != null),
         assert(map['senderId'] != null),
+        assert(map['receiverId'] != null),
 
         message = map['message'],
         time = map['time'],
         date = map['date'],
-        profileImageUrl = map['profileImageUrl'],
-        senderName = map['senderName'],
-        senderId = map['senderId'];
+        senderUId = map['senderId'],
+        receiverUId = map['receiverId'];
+
 
   LiveChatData.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), reference: snapshot.reference);

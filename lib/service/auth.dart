@@ -9,7 +9,7 @@ class QuickAuthService {
   FirebaseMethods _fireMethods = new FirebaseMethods();
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String _profileImageUrl = "https://firebasestorage.googleapis.com/v0/b/quickseen-d0404.appspot.com/o/Webp.net-resizeimage%20(15).png?alt=media&token=76537909-1c89-4f72-9e11-ba3c9efeb0d3";
+  String _profileImageUrl = "https://firebasestorage.googleapis.com/v0/b/quickseen.appspot.com/o/profile_image.png?alt=media&token=a59cf172-836c-458d-b186-dd4572d8af73";
 
   Stream<User> get user {
     return _auth.authStateChanges();

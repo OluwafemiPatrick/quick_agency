@@ -8,6 +8,7 @@ import 'package:quickseen_agent/home/wrapper.dart';
 import 'package:quickseen_agent/service/auth.dart';
 import 'package:quickseen_agent/shared/colors.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       value: QuickAuthService().user,
       child: GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'QuickSeen Agent',
+          title: 'QuickSeen Agency',
           theme: ThemeData(
             primaryColor: colorPrimaryRed,
             accentColor: colorWhite,

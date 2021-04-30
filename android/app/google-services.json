@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "822321076894",
-    "firebase_url": "https://quickseen-d0404-default-rtdb.firebaseio.com",
-    "project_id": "quickseen-d0404",
-    "storage_bucket": "quickseen-d0404.appspot.com"
+    "project_number": "380951015376",
+    "firebase_url": "https://quickseen-default-rtdb.firebaseio.com",
+    "project_id": "quickseen",
+    "storage_bucket": "quickseen.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:822321076894:android:2965533f82b39b233c798f",
+        "mobilesdk_app_id": "1:380951015376:android:1631da960060a0b8ba13d5",
         "android_client_info": {
           "package_name": "com.quickseen.agency"
         }
       },
       "oauth_client": [
         {
-          "client_id": "822321076894-4u1n6k5c912lpgdmd0r90faetbmct2c4.apps.googleusercontent.com",
+          "client_id": "380951015376-4tiepqic6795e3aujugjdnnubb48662r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.quickseen.agency",
-            "certificate_hash": "77aedab3f44a620d686ce5f98832a0f9bbf7a1f0"
+            "certificate_hash": "7142d1cff0b0e3b9679b1063b6151be7a8136f63"
           }
         },
         {
-          "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+          "client_id": "380951015376-bks1poer3hq6v9h97guicf4d1t69dlv3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBpG4Sve-fb3ipDneDbs-VYLnYI8DDamKI"
+          "current_key": "AIzaSyDvX_AE4ziMQDdfcX28EUkSXCmFjh4g9rM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+              "client_id": "380951015376-bks1poer3hq6v9h97guicf4d1t69dlv3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -45,35 +45,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:822321076894:android:28de6b514d1ef3113c798f",
+        "mobilesdk_app_id": "1:380951015376:android:9e98c552df7408c0ba13d5",
         "android_client_info": {
           "package_name": "com.quickseen.rider"
         }
       },
       "oauth_client": [
         {
-          "client_id": "822321076894-s8erb8hb904e3mesublcis53brt5lf46.apps.googleusercontent.com",
+          "client_id": "380951015376-prdq451ornh45jip8ge9k73re59t49ft.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.quickseen.rider",
-            "certificate_hash": "833b203988960eb7e775e57265c4615cb137f63d"
+            "certificate_hash": "7142d1cff0b0e3b9679b1063b6151be7a8136f63"
           }
         },
         {
-          "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+          "client_id": "380951015376-bks1poer3hq6v9h97guicf4d1t69dlv3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBpG4Sve-fb3ipDneDbs-VYLnYI8DDamKI"
+          "current_key": "AIzaSyDvX_AE4ziMQDdfcX28EUkSXCmFjh4g9rM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+              "client_id": "380951015376-bks1poer3hq6v9h97guicf4d1t69dlv3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -82,35 +82,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:822321076894:android:13d7a82ff3d060133c798f",
+        "mobilesdk_app_id": "1:380951015376:android:72cb6900457e9d35ba13d5",
         "android_client_info": {
           "package_name": "com.quickseen.vendor"
         }
       },
       "oauth_client": [
         {
-          "client_id": "822321076894-rsk6ituroh5q10bothci9hn8em2mfo7l.apps.googleusercontent.com",
+          "client_id": "380951015376-n884pndbq7st85gcgm94c1n5l1rbegbu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.quickseen.vendor",
-            "certificate_hash": "833b203988960eb7e775e57265c4615cb137f63d"
+            "certificate_hash": "7142d1cff0b0e3b9679b1063b6151be7a8136f63"
           }
         },
         {
-          "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+          "client_id": "380951015376-bks1poer3hq6v9h97guicf4d1t69dlv3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBpG4Sve-fb3ipDneDbs-VYLnYI8DDamKI"
+          "current_key": "AIzaSyDvX_AE4ziMQDdfcX28EUkSXCmFjh4g9rM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "822321076894-shvh13mt0st9u8gelmq4utlvb1ln0v5d.apps.googleusercontent.com",
+              "client_id": "380951015376-bks1poer3hq6v9h97guicf4d1t69dlv3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

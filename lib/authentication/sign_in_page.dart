@@ -26,6 +26,7 @@ class _SignInPageState extends State<SignInPage> {
   String _errorMessage = "";
 
   bool _isLoading = false;
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -62,7 +63,7 @@ class _SignInPageState extends State<SignInPage> {
             Positioned(
               top: 0,
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.50,
+                height: MediaQuery.of(context).size.height * 0.49,
                 width: MediaQuery.of(context).size.width,
                 child: Image.asset("assets/images/welcome_background.jpg",
                   fit: BoxFit.fill,
@@ -73,9 +74,9 @@ class _SignInPageState extends State<SignInPage> {
               bottom: 0,
               child: Container(
                 alignment: Alignment.center,
-                height: MediaQuery.of(context).size.height * 0.51,
+                height: MediaQuery.of(context).size.height * 0.50,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 10.0),
+                padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 5.0),
                 decoration: BoxDecoration(
                   color: colorWhite,
                   borderRadius: BorderRadius.only(
@@ -105,34 +106,35 @@ class _SignInPageState extends State<SignInPage> {
                             fontSize: 17.0, fontWeight: FontWeight.bold, color: colorPrimaryBlue),),
                       ),
                       Expanded(
-                        child: Column(
-                          children: [
-                            showEmailInput(),
-                            showPasswordInput(),
-                            SizedBox(height: 5.0,),
-                            Text(_errorMessage, style: TextStyle(color: colorPrimaryBlue, fontSize: 14.0),
-                              textAlign: TextAlign.center,),
-                            SizedBox(height: 20.0,),
-                            signInButton(),
-                            SizedBox(height: 5.0,),
-                            Text("Don't have an account?", style: TextStyle(fontSize: 14.0, color: colorBlack),
-                              textAlign: TextAlign.center,),
-                            signUpButton(),
-                          ] ),
+                        child: Container(
+                          child: ListView(
+                              children: [
+                                showEmailInput(),
+                                showPasswordInput(),
+                                SizedBox(height: 5.0,),
+                                Text(_errorMessage, style: TextStyle(color: colorPrimaryBlue, fontSize: 14.0),
+                                  textAlign: TextAlign.center,),
+                                SizedBox(height: 10.0,),
+                                signInButton(),
+                                SizedBox(height: 5.0,),
+                                Text("Don't have an account?", style: TextStyle(fontSize: 14.0, color: colorBlack),
+                                  textAlign: TextAlign.center,),
+                                signUpButton(),
+                              ] ),
+                        ),
                       ),
-                    ], ),
+                    ] ),
                 ),
               ),
             )
-          ],
-        ),
+          ]),
       ),
     );
   }
 
   Widget showEmailInput() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15.0),
+    return Container(
+      padding: const EdgeInsets.only(top: 10.0),
       child: new TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
@@ -153,24 +155,42 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget showPasswordInput() {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(top: 15.0),
-      child: new TextFormField(
-        maxLines: 1,
-        obscureText: true,
-        autofocus: false,
-        decoration: InputDecoration(
-            hintText: "Password",
-            icon: Icon(
-              Icons.lock,
-              color: colorPrimaryRed,
-            )),
-        validator: (value) =>
-        value.length < 6 ? "Password cannot be less than 6 chars" : null,
-        onSaved: (value) => _password = value.trim(),
-        onChanged: (value) {
-          setState(() => _password = value);
-        },
+      child: Stack(
+        children: [
+          TextFormField(
+            maxLines: 1,
+            obscureText: _obscureText,
+            autofocus: false,
+            decoration: InputDecoration(
+                hintText: "Password",
+                icon: Icon(
+                  Icons.lock,
+                  color: colorPrimaryRed,
+                )),
+            validator: (value) =>
+            value.length < 6 ? "Password cannot be less than 6 chars" : null,
+            onSaved: (value) => _password = value.trim(),
+            onChanged: (value) {
+              setState(() => _password = value);
+            },
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              margin: EdgeInsets.only(top: 15.0, right: 10.0),
+              height: 20.0,
+              width: 30.0,
+              child: FlatButton(
+                child: Icon(_obscureText==true ? Icons.visibility : Icons.visibility_off, color: colorPrimaryGrey),
+                onPressed: () {
+                  setState(() => _obscureText = !_obscureText);
+                },
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -199,7 +219,7 @@ class _SignInPageState extends State<SignInPage> {
               builder: (BuildContext context) => Wrapper(),
             ), (route) => false,
             );
-            toastMessage("Welcome User");
+            toastMessage("Welcome back");
           }
 
         } else {

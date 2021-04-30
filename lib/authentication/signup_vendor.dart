@@ -24,6 +24,7 @@ class _SignUpVendorState extends State<SignUpVendor> {
 
   bool _isChecked = false;
   bool _isLoading = false;
+  bool _obscureText = true;
 
   String _firstName = "";
   String _lastName = "";
@@ -232,22 +233,39 @@ class _SignUpVendorState extends State<SignUpVendor> {
   Widget showPasswordInput() {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
-      child: new TextFormField(
-        maxLines: 1,
-        obscureText: true,
-        autofocus: false,
-        decoration: InputDecoration(
-            hintText: "Password",
-            icon: Icon(
-              Icons.lock,
-              color: colorPrimaryRed,
-            )),
-        validator: (value) =>
-        value.length < 6 ? "Password cannot be less than 6 chars" : null,
-        onSaved: (value) => _password = value.trim(),
-        onChanged: (value) {
-          setState(() => _password = value);
-        },
+      child: Stack(
+        children: [
+          TextFormField(
+            maxLines: 1,
+            obscureText: _obscureText,
+            autofocus: false,
+            decoration: InputDecoration(
+                hintText: "Password",
+                icon: Icon(Icons.lock,
+                  color: colorPrimaryRed,
+                )),
+            validator: (value) =>
+            value.length < 6 ? "Password cannot be less than 6 chars" : null,
+            onSaved: (value) => _password = value.trim(),
+            onChanged: (value) {
+              setState(() => _password = value);
+            },
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              margin: EdgeInsets.only(top: 15.0, right: 10.0),
+              height: 20.0,
+              width: 30.0,
+              child: FlatButton(
+                child: Icon(_obscureText==true ? Icons.visibility : Icons.visibility_off, color: colorPrimaryGrey),
+                onPressed: () {
+                  setState(() => _obscureText = !_obscureText);
+                },
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -255,22 +273,40 @@ class _SignUpVendorState extends State<SignUpVendor> {
   Widget showConfirmPasswordInput() {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
-      child: new TextFormField(
-        maxLines: 1,
-        obscureText: true,
-        autofocus: false,
-        decoration: InputDecoration(
-            hintText: "Confirm Password",
-            icon: Icon(
-              Icons.lock,
-              color: colorPrimaryRed,
-            )),
-        validator: (value) =>
-        _password != _confirmPassword ? "Passwords do not match" : null,
-        onSaved: (value) => _confirmPassword = value.trim(),
-        onChanged: (value) {
-          setState(() => _confirmPassword = value);
-        },
+      child: Stack(
+        children: [
+          TextFormField(
+            maxLines: 1,
+            obscureText: _obscureText,
+            autofocus: false,
+            decoration: InputDecoration(
+                hintText: "Confirm Password",
+                icon: Icon(
+                  Icons.lock,
+                  color: colorPrimaryRed,
+                )),
+            validator: (value) =>
+            _password != _confirmPassword ? "Passwords do not match" : null,
+            onSaved: (value) => _confirmPassword = value.trim(),
+            onChanged: (value) {
+              setState(() => _confirmPassword = value);
+            },
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              margin: EdgeInsets.only(top: 15.0, right: 10.0),
+              height: 20.0,
+              width: 30.0,
+              child: FlatButton(
+                child: Icon(_obscureText==true ? Icons.visibility : Icons.visibility_off, color: colorPrimaryGrey),
+                onPressed: () {
+                  setState(() => _obscureText = !_obscureText);
+                },
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -332,7 +368,7 @@ class _SignUpVendorState extends State<SignUpVendor> {
                 builder: (BuildContext context) => Wrapper(),
               ), (route) => false,
               );
-              toastMessage("Welcome User");
+              toastMessage("Welcome $_businessName");
             }
           }
           else {

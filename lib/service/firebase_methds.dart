@@ -93,5 +93,38 @@ class FirebaseMethods{
     });
   }
 
+  Future sendMessageToSenderAndReceiverDB(String senderName, senderProfileUrl, senderUId, receiverName, receiverProfileUrl,
+      receiverUId, message, date, time, chatId) async {
+
+    DatabaseReference databaseReference = FirebaseDatabase.instance.reference().child("chats");
+
+    databaseReference.child(senderUId).child(chatId).set({
+      "senderName" : senderName,
+      "senderProfileUrl" : senderProfileUrl,
+      "senderUId" : senderUId,
+      "receiverName" : receiverName,
+      "receiverProfileUrl" : receiverProfileUrl,
+      "receiverUId" : receiverUId,
+      "chatId" : chatId,
+      "message" : message,
+      "date" : date,
+      "time" : time,
+    });
+
+    databaseReference.child(receiverUId).child(chatId).set({
+      "senderName" : senderName,
+      "senderProfileUrl" : senderProfileUrl,
+      "senderUId" : senderUId,
+      "receiverName" : receiverName,
+      "receiverProfileUrl" : receiverProfileUrl,
+      "receiverUId" : receiverUId,
+      "chatId" : chatId,
+      "message" : message,
+      "date" : date,
+      "time" : time,
+    });
+
+  }
+
 
 }

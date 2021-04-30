@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:quickseen_agent/agent/dashboard/data_model.dart';
+import 'package:quickseen_agent/agent/message/data_model.dart';
+import 'package:quickseen_agent/service/firebase_methds.dart';
 import 'package:quickseen_agent/shared/colors.dart';
 import 'package:quickseen_agent/shared/spinner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,22 +13,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LiveChat extends StatefulWidget {
 
-  final String chatId, senderName, profileUrl;
-  LiveChat(this.chatId, this.senderName, this.profileUrl);
-
+  final String chatId, vendorId, vendorName, vendorProfileUrl, agencyName, agencyProfileUrl;
+  LiveChat(this.chatId, this.vendorId, this.vendorName, this.vendorProfileUrl, 
+      this.agencyName, this.agencyProfileUrl);
+  
   @override
   _LiveChatState createState() => _LiveChatState();
+  
 }
 
 class _LiveChatState extends State<LiveChat> {
-  SharedPreferences prefs;
-  String _chatId, _message, _time, _date, _profileUrl, _senderName, _userId;
+
+  String _chatId, _message, _time, _date, _vendorId="", _vendorName="", _vendorProfileUrl="",
+      _agentId, _agentName="", _agentProfileUrl="";
 
   bool _isLoading = false;
+  final _controller = ScrollController();
 
   @override
   void initState() {
     _retrieveDataFromPreviousPage();
+    _scrollToBottom();
     super.initState();
   }
 
@@ -37,26 +45,27 @@ class _LiveChatState extends State<LiveChat> {
             backgroundColor: colorPrimaryRed,
             iconTheme: IconThemeData(color: colorWhite, size: 10),
             centerTitle: true,
-            title: Text("QuickChat", style: TextStyle(color: colorWhite),)
+            title: Text(_vendorName, style: TextStyle(color: colorWhite),)
         ),
         body: Container(
           color: colorBackground,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Stack(
-            children: [
-              Image.asset("assets/images/chat_background.png",
+              children: [
+                Image.asset("assets/images/chat_background.png",
                   width: MediaQuery.of(context).size.width,
                   fit: BoxFit.fill,),
-              Column(
-                children: [
-                  Expanded(child: _buildBody(context)),
-                  _bottomSection(),
-                ]),
-            ]),
+                Column(
+                    children: [
+                      Expanded(child: _buildBody(context)),
+                      _bottomSection(),
+                    ]),
+              ]),
         )
     );
   }
+
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -77,10 +86,10 @@ class _LiveChatState extends State<LiveChat> {
     final record = LiveChatData.fromSnapshot(documentSnapshot);
     int data;
 
-    if (_userId == record.senderId){
+    if (_agentId == record.senderUId){
       data = 1;
     } else{
-      data = 0;
+      data = 0;                                                                                                                                                                                                                                                                                                                                                                                          ;
     }
     return Container(
       margin: EdgeInsets.only(top: 10.0),
@@ -98,11 +107,7 @@ class _LiveChatState extends State<LiveChat> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(record.message, style: TextStyle(fontSize: 16.0, color: colorBlack),),
-                        SizedBox(height: 8.0,),
-                        Text(data==0 ? record.senderName : "me",
-                          style: TextStyle(fontSize: 12.0, color: colorBlack),
-                        ),
-                        SizedBox(width: 5.0,),
+                        SizedBox(height: 15.0,),
                         Row(
                           children: [
                             Text(record.date, style: TextStyle(fontSize: 12.0, color: colorBlack),),
@@ -117,7 +122,6 @@ class _LiveChatState extends State<LiveChat> {
 
           ]),
     );
-
   }
 
 
@@ -125,44 +129,44 @@ class _LiveChatState extends State<LiveChat> {
     return _isLoading ? Spinner() : Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 6.0),
-              decoration: new BoxDecoration(color: colorWhite,
-                  borderRadius: new BorderRadius.all(Radius.circular(16.0))),
-              child: TextField(
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                autofocus: false,
-                autocorrect: true,
-                decoration: InputDecoration(hintText: "Type a message"),
-                style: TextStyle(fontSize: 16.0, color: colorPrimaryBlue),
-                onChanged: (value) => setState(() => _message = value),
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 6.0),
+                decoration: new BoxDecoration(color: colorWhite,
+                    borderRadius: new BorderRadius.all(Radius.circular(16.0))),
+                child: TextField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 3,
+                  autofocus: false,
+                  autocorrect: true,
+                  decoration: InputDecoration(hintText: "Type a message"),
+                  style: TextStyle(fontSize: 16.0, color: colorPrimaryBlue),
+                  onChanged: (value) => setState(() => _message = value),
+                ),
               ),
             ),
-          ),
-          SizedBox(width: 6.0),
-          Container(
-            width: 46.0,
-            decoration: new BoxDecoration(color: colorPrimaryGreen,
-                borderRadius: new BorderRadius.all(Radius.circular(25.0))),
-            child: FlatButton(
-              child: Icon(Icons.send, color: colorWhite, size: 22.0,),
-              onPressed: () {
-                if(_message!=null || _message.isNotEmpty){
-                  _generateDateAndTime();
-                }
-              },
-            ),
-          )
-        ],),
+            SizedBox(width: 6.0),
+            Container(
+              width: 46.0,
+              decoration: new BoxDecoration(color: colorPrimaryGreen,
+                  borderRadius: new BorderRadius.all(Radius.circular(25.0))),
+              child: FlatButton(
+                child: Icon(Icons.send, color: colorWhite, size: 22.0,),
+                onPressed: () {
+                  if(_message!=null || _message.isNotEmpty){
+                    _generateDateAndTime();
+                  }
+                },
+              ),
+            )
+          ]),
     );
   }
 
 
-  Future _sendMessageToDb (String senderName, date, time, profileImageUrl, message, senderId) async {
+  Future _sendMessageToDb (String date, time, message, senderId, receiverId) async {
     final savedRouteRef = FirebaseFirestore.instance.collection(_chatId);
     setState(() => _isLoading = true);
 
@@ -170,9 +174,8 @@ class _LiveChatState extends State<LiveChat> {
       'message': message,
       'time': time,
       'date': date,
-      'profileImageUrl': profileImageUrl,
-      'senderName': senderName,
       'senderId': senderId,
+      'receiverId' : receiverId,
     }).then((value) {
       setState(() {
         _isLoading = false;
@@ -183,13 +186,16 @@ class _LiveChatState extends State<LiveChat> {
 
 
   _generateDateAndTime() async {
+    FirebaseMethods _fireMethods = new FirebaseMethods();
     DateTime now = DateTime.now();
     setState(() {
       _date = DateFormat('EEE d MMM').format(now);
       _time = DateFormat('kk:mm').format(now);
     });
-    _sendMessageToDb(_senderName, _date, _time, _profileUrl, _message, _userId);
 
+    _fireMethods.sendMessageToSenderAndReceiverDB(_vendorName, _vendorProfileUrl,
+        _vendorId, _agentName, _agentProfileUrl, _agentId, _message, _date, _time, _chatId);
+    _sendMessageToDb(_date, _time, _message, _agentId, _vendorId);
   }
 
   static String currentTimeInSeconds() {
@@ -197,13 +203,23 @@ class _LiveChatState extends State<LiveChat> {
     return (ms / 1000).round().toString();
   }
 
+  _scrollToBottom(){
+    Timer(
+      Duration(seconds: 1),
+          () => _controller.jumpTo(_controller.position.maxScrollExtent),
+    );
+  }
+
   _retrieveDataFromPreviousPage() async {
-    prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _chatId = widget.chatId;
-      _senderName = widget.senderName;
-      _profileUrl = widget.profileUrl;
-      _userId = prefs.getString("currentUser");
+      _vendorId = widget.vendorId;
+      _vendorName = widget.vendorName;
+      _vendorProfileUrl = widget.vendorProfileUrl;
+      _agentName = widget.agencyName;
+      _agentProfileUrl = widget.agencyProfileUrl;
+      _agentId = prefs.getString("currentUser");
     });
   }
 

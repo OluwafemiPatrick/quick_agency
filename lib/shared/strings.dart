@@ -1,5 +1,4 @@
-const String GOOGLE_API_KEY = "AIzaSyBZwlabNkzCF5PV3Nmc6RrBycQWWgLpdKE";
-
+const String GOOGLE_API_KEY = "AIzaSyARUXK2E-OW88eUOmNCaXF3fxFpNc13Vl4";
 
 String naira = "\u{20A6}";
 

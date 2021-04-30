@@ -4,14 +4,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/places.dart' hide Location;
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' hide LocationAccuracy;
-import 'package:path/path.dart' hide Context;
 import 'package:quickseen_agent/home/home_agent.dart';
 import 'package:quickseen_agent/shared/colors.dart';
 import 'package:quickseen_agent/shared/spinner.dart';
+import 'package:quickseen_agent/shared/strings.dart';
 import 'package:quickseen_agent/shared/toast_message.dart';
 
 
@@ -34,6 +36,8 @@ class _IdentityVerificationState extends State<IdentityVerification> {
   Set<Marker> _markers = {};
   GoogleMapController googleMapController;
   Location location = new Location();
+  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: GOOGLE_API_KEY);
+
 
   double _textSize = 15.0;
 
@@ -47,7 +51,7 @@ class _IdentityVerificationState extends State<IdentityVerification> {
   bool _isLoading = false;
   bool _isMapSelected = false;
 
-  String _businessName, _firstName, _lastName, _mainAddress, _contactName, _contactPhone;
+  String _businessName, _firstName, _lastName, _mainAddress, _contactName, _contactPhone, _message='';
   String _imageOneString, _imageTwoString, _profileImageLink, _agentId, _isIdVerified;
   String _text = "To get you started on the QuickSeen Logistic Platform, kindly provide the following details";
   String _seekHelp = "Should you require help at any point during the verification, please reach out to our customer care "
@@ -95,7 +99,12 @@ class _IdentityVerificationState extends State<IdentityVerification> {
                   _mapSelectContainer(),
                   Visibility(
                     visible: _isLoading,
-                    child: Spinner()
+                    child: Column(
+                      children: [
+                        Expanded(child: Spinner()),
+                        Text(_message)
+                      ],
+                    )
                   ),
                 ])
               ),
@@ -446,8 +455,7 @@ class _IdentityVerificationState extends State<IdentityVerification> {
                           onPressed: (){ },
                         )
                     ),
-                  ],
-                ),
+                  ]),
               ],
             ),
           ),
@@ -462,6 +470,7 @@ class _IdentityVerificationState extends State<IdentityVerification> {
                   if (_mainAddress!=null && _contactName!=null){
                     setState(() {
                       _isLoading = true;
+                      _message = 'Uploading data to database ...';
                       _uploadImageToStorage(context);
                     });
                   } else {
@@ -721,6 +730,16 @@ class _IdentityVerificationState extends State<IdentityVerification> {
                                 _displayMapLocationPicker();
                               },
                             ),
+                            FlatButton(
+                              minWidth: MediaQuery.of(context).size.width,
+                              child: (Text("manual search",
+                                style: TextStyle(color: colorPrimaryBlue, fontSize: 16.0),
+                              )),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                _locationSearch();
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -807,8 +826,8 @@ class _IdentityVerificationState extends State<IdentityVerification> {
 
   Future _uploadImageToStorage(BuildContext context) async {
 
-    String fileName1 = basename(_imageFile1.path);
-    String fileName2 = basename(_imageFile2.path);
+    var fileName1 = _agentId+'01';
+    var fileName2 = _agentId+'02';
     StorageReference firebaseStorageRef1 = FirebaseStorage.instance.ref().child('identities/$fileName1');
     StorageReference firebaseStorageRef2 = FirebaseStorage.instance.ref().child('identities/$fileName2');
 
@@ -825,6 +844,30 @@ class _IdentityVerificationState extends State<IdentityVerification> {
     });
   }
 
+  Future<Null> displayPrediction(Prediction p) async {
+    if (p != null) {
+      PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
+      final lat = detail.result.geometry.location.lat;
+      final lng = detail.result.geometry.location.lng;
+
+      setState(() {
+        _currentLocation = new LatLng(lat, lng);
+        _getCurrentAddress();
+      });
+    }
+  }
+
+  _locationSearch() async {
+    setState(() => _currentLocation = null);
+
+    Prediction p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: GOOGLE_API_KEY,
+      mode: Mode.fullscreen,
+      language: "en",
+    );
+    displayPrediction(p);
+  }
 
   _displayMapLocationPicker(){
     setState(() {

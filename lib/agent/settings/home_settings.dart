@@ -117,19 +117,6 @@ class _HomeSettingsState extends State<HomeSettings> {
               },
             ),
             Divider(thickness: 2.0, height: 30.0,),
-            // FlatButton(
-            //   child: Container(
-            //       width: MediaQuery.of(context).size.width,
-            //       child: Text("Address Update", style: TextStyle(fontSize: _textSize, color: colorPrimaryBlue),)),
-            //   onPressed: () {
-            //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddressUpdate(
-            //         _address1, _address2, _address3, _address4, _address5, _address6, _address7, _address8, _address9, _address10,
-            //         _contactName1, _contactName2, _contactName3, _contactName4, _contactName5, _contactName6, _contactName7,
-            //         _contactName8, _contactName9, _contactName10, _contactNum1, _contactNum2, _contactNum3, _contactNum4, _contactNum5,
-            //         _contactNum6, _contactNum7, _contactNum8, _contactNum9, _contactNum10)));
-            //   },
-            // ),
-            // Divider(thickness: 2.0, height: 30.0,),
             FlatButton(
               child: Container(
                   width: MediaQuery.of(context).size.width,

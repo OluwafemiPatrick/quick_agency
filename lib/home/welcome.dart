@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quickseen_agent/authentication/authentication_toggle.dart';
 import 'package:quickseen_agent/shared/colors.dart';
+
 
 class Welcome extends StatefulWidget {
   @override
@@ -9,14 +11,16 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
-  String _text = "";
+
 
   @override
   void initState() {
-    super.initState();
+    _checkPermission();
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    super.initState();
   }
+
 
   @override
   void dispose() {
@@ -27,6 +31,14 @@ class _WelcomeState extends State<Welcome> {
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
+  }
+
+  _checkPermission() async {
+    var permissionStatus = await Permission.locationAlways.status;
+
+    if (!permissionStatus.isGranted){
+      requestPermissionDialog(context);
+    }
   }
 
   @override
@@ -45,9 +57,9 @@ class _WelcomeState extends State<Welcome> {
             Positioned(
               top: 0,
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.55,
+                height: MediaQuery.of(context).size.height * 0.52,
                 width: MediaQuery.of(context).size.width,
-                child: Image.asset("assets/images/welcome_background.jpg",
+                child: Image.asset("assets/images/welcome_bg.jpg",
                   fit: BoxFit.fill,
                 ),
               ),
@@ -56,7 +68,7 @@ class _WelcomeState extends State<Welcome> {
               bottom: 0,
               child: Container(
                 alignment: Alignment.center,
-                height: MediaQuery.of(context).size.height * 0.46,
+                height: MediaQuery.of(context).size.height * 0.47,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: colorWhite,
@@ -85,11 +97,7 @@ class _WelcomeState extends State<Welcome> {
                       style: TextStyle(color: colorBlack),
                       textAlign: TextAlign.center,
                     ),
-                    Expanded(child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Center(child: Text(_text, style: TextStyle(fontSize: 15.0, fontStyle: FontStyle.italic),)
-                      ),
-                    )),
+                    Expanded(child: Container()),
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => AuthToggle("signUp")));
@@ -131,7 +139,7 @@ class _WelcomeState extends State<Welcome> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -141,5 +149,64 @@ class _WelcomeState extends State<Welcome> {
       ),
     );
   }
+
+
+  Future requestPermissionDialog(BuildContext context) async {
+    var locationPermission = Permission.locationAlways;
+    String message = "Dear user, we need access to your location.";
+    String message2 = "This app collects location data to enable key features work properly even when the app is closed or not in use."
+        " Your data is well protected, and will not be shared with any third party platform or service.";
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+            child: Container(
+              padding: const EdgeInsets.only(left:5.0, right: 5.0, top: 10.0, bottom: 5.0),
+              height: 190.0,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                  children: <Widget>[
+                    Text(message, style: TextStyle(
+                        fontSize: 17.0, color: colorPrimaryBlue, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
+                        textAlign: TextAlign.center),
+                    SizedBox(height: 10.0),
+                    Expanded(child: Text(message2, textAlign: TextAlign.center,)),
+                    Container(
+                      height: 32.0,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            FlatButton(
+                                height: 32.0,
+                                minWidth: 120.0,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                                color: colorPrimaryGreen,
+                                child: Text("Decline", style: TextStyle(fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.normal),),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }
+                            ),
+                            FlatButton(
+                                height: 32.0,
+                                minWidth: 120.0,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                                color: colorRedShade,
+                                child: Text("Accept", style: TextStyle(fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.normal),),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  locationPermission.request();
+                                }
+                            ),
+                          ]),
+                    )
+                  ]),
+            ),
+          );
+        }
+    );
+  }
+
 
 }

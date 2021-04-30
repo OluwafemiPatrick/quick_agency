@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' hide Context;
 import 'package:quickseen_agent/agent/home/home_data_model.dart';
+import 'package:quickseen_agent/agent/home/rider_successfully_verified.dart';
 import 'package:quickseen_agent/home/home_agent.dart';
 import 'package:quickseen_agent/shared/colors.dart';
 import 'package:quickseen_agent/shared/spinner.dart';
@@ -34,23 +35,26 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
   String _proceedToUpload = "After manual verification, kindly upload a copy of each document for review.";
   String _discountInfo = "The agency is expected to negotiate a percentage fee to charge from all orders of the rider. "
       "QuickSeen expects this to be less than 20%.";
+  String _provideGuarantorDetails = "The rider is also expected to present details of his guarantor. Required guarantor's details are "
+      "\n   * full name \n   * phone \n   * valid means of identification";
+
 
   bool _isQueryComplete = false;
   bool _isLoading = false;
   bool _isBodyOne = true;
   bool _isBodyTwo = false;
   bool _isBodyThree = false;
+  bool _isBodyFour = false;
 
-  File _imageFile1, _imageFile2, _imageFile3;
+  File _imageFile1, _imageFile2, _imageFile3, _imageFile4;
   SharedPreferences prefs;
-  String _vehicle = "", _percentage, _riderMail, _riderName, _isIdVerified;
-  String _imageOneString, _imageTwoString, _imageThreeString, _agencyName, _noOfRegisteredRiders;
+  String _vehicle = "", _percentage, _riderMail, _riderName, _isIdVerified, _fullNameG, _phoneG;
+  String _imageOneString, _imageTwoString, _imageThreeString, _imageFourString, _agencyName, _noOfRegisteredRiders;
 
-  final double _textSize = 15.0;
+  final double _textSize = 14.0;
 
   @override
   void initState() {
-    // TODO: implement initState
     setState(() => _riderId = widget.riderId);
     _fetchDataFromDB();
     super.initState();
@@ -105,6 +109,7 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
                     _body1(context),
                     _body2(context),
                     _body3(context),
+                    _body4(context),
                   ],
                 )),
               ])
@@ -122,7 +127,7 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(_uploadInfo, style: TextStyle(fontSize: 16.0, color: colorBlack,)),
+                    child: Text(_uploadInfo, style: TextStyle(fontSize: 15.0, color: colorBlack,)),
                   ),
                   SizedBox(height: 10.0),
                   Padding(
@@ -154,7 +159,12 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
                   SizedBox(height: 10.0,),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(_proceedToUpload, style: TextStyle(fontSize: 16.0, color: colorBlack,)),
+                    child: Text(_proceedToUpload, style: TextStyle(fontSize: 15.0, color: colorBlack,)),
+                  ),
+                  SizedBox(height: 10.0,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(_provideGuarantorDetails, style: TextStyle(fontSize: 15.0, color: colorBlack,)),
                   ),
                 ]),
           ),
@@ -261,7 +271,8 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
                     setState(() {
                       _isBodyOne = false;
                       _isBodyTwo = false;
-                      _isBodyThree = true;
+                      _isBodyThree = false;
+                      _isBodyFour = true;
                     });
                   } else{
                     toastMessage("All document images is required");
@@ -271,6 +282,137 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
           ),
         ],
       )
+    );
+  }
+
+  Widget _body4(BuildContext context){
+    String guarantorInfo = "Kindly fill in guarantor's contact details. All fields are required.";
+
+    return Visibility(
+      visible: _isBodyFour,
+      child: Column(
+          children: [
+            Expanded(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6.0, bottom: 15.0, right: 6.0),
+                      child: Text(guarantorInfo, style: TextStyle(fontSize: 16.0, color: colorBlack,),
+                        textAlign: TextAlign.center,),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      height: 44.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 85.0,
+                            child: Text("Guarantor \nfull name",style: TextStyle(
+                                fontSize: _textSize+1, color: colorBlack
+                            ),),
+                          ),
+                          SizedBox(width: 10.0,),
+                          Expanded(
+                            child: Container(
+                              height: 43.0,
+                              padding: EdgeInsets.only(left: 14.0, right: 10.0, top: 10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: colorRedShade),
+                                borderRadius: BorderRadius.circular(10.0),),
+                              child: TextField(
+                                style: TextStyle(fontSize: _textSize),
+                                maxLength: 80,
+                                keyboardType: TextInputType.name,
+                                decoration: null,
+                                autofocus: false,
+                                onChanged: (value){
+                                  setState(() => _fullNameG = value);
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      height: 44.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 85.0,
+                            child: Text("Phone number",style: TextStyle(
+                                fontSize: _textSize+1, color: colorBlack
+                            ),),
+                          ),
+                          SizedBox(width: 10.0,),
+                          Expanded(
+                            child: Container(
+                              height: 43.0,
+                              padding: EdgeInsets.only(left: 14.0, right: 10.0, top: 10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: colorRedShade),
+                                borderRadius: BorderRadius.circular(10.0),),
+                              child: TextField(
+                                style: TextStyle(fontSize: _textSize),
+                                maxLength: 11,
+                                keyboardType: TextInputType.phone,
+                                decoration: null,
+                                autofocus: false,
+                                onChanged: (value){
+                                  setState(() => _phoneG = value);
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        child: _imageFile4==null ? Column(
+                          children: [
+                            SizedBox(height: 15.0,),
+                            Image.asset("assets/images/gallery_icon.png"),
+                            SizedBox(height: 5.0,),
+                            Text('Valid means of identification')
+                          ])
+                            : Image.file(_imageFile4, fit: BoxFit.fill,),
+                        onTap: () => openCameraDialog4(context),
+                      ),
+                    ),
+                    SizedBox(height: 5.0,)
+                  ],
+                )
+            ),
+            Container(
+              height: 40.0,
+              width: MediaQuery.of(context).size.width,
+              child: FlatButton(
+                  child: Text("Proceed", style: TextStyle(fontSize: 16.0, color: colorWhite),),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                  color: colorRedShade,
+                  onPressed: () {
+                    if (_fullNameG!=null && _phoneG!=null && _imageFile4!=null){
+                      setState(() {
+                        _isBodyOne = false;
+                        _isBodyTwo = false;
+                        _isBodyThree = true;
+                        _isBodyFour = false;
+                      });
+                    } else{
+                      toastMessage("Kindly provide all details");
+                    }
+                  }
+              ),
+            ),
+          ]),
     );
   }
 
@@ -295,7 +437,7 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
                       SizedBox(
                         width: 85.0,
                         child: Text("Percentage charge",style: TextStyle(
-                            fontSize: _textSize, color: colorBlack
+                            fontSize: _textSize+1, color: colorBlack
                         ),),
                       ),
                       SizedBox(width: 10.0,),
@@ -308,7 +450,7 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
                             border: Border.all(color: colorRedShade),
                             borderRadius: BorderRadius.circular(10.0),),
                           child: TextField(
-                            style: TextStyle(fontSize: _textSize-1),
+                            style: TextStyle(fontSize: _textSize),
                             maxLength: 80,
                             keyboardType: TextInputType.number,
                             decoration: null,
@@ -331,7 +473,7 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
                       SizedBox(
                         width: 85.0,
                         child: Text("Rider \nvehicle type",style: TextStyle(
-                            fontSize: _textSize, color: colorBlack
+                            fontSize: _textSize+1, color: colorBlack
                         ),),
                       ),
                       SizedBox(width: 10.0,),
@@ -347,7 +489,7 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
                             child: Row(
                               children: [
                                 Expanded(child: Text(_vehicle, style: TextStyle(
-                                    fontSize: _textSize-1, color: colorBlack, fontWeight: FontWeight.normal),)),
+                                    fontSize: _textSize, color: colorBlack, fontWeight: FontWeight.normal),)),
                                 Icon(Icons.arrow_drop_down, size: 30.0, color: colorBlack,),
                                 SizedBox(width: 12.0,),
                               ],),
@@ -614,6 +756,59 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
     );
   }
 
+  Future openCameraDialog4(BuildContext context){
+    return showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            child: Container(
+              padding: const EdgeInsets.all(10.0),
+              height: 160.0,
+              child: Column(
+                  children: <Widget>[
+                    Text("Select image from",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: colorPrimaryBlue),),
+                    SizedBox(height: 32.0,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        FlatButton(
+                          onPressed: () {
+                            _getImageFromCamera4();
+                            Navigator.pop(context);
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Image.asset("assets/images/image_camera.jpeg", height: 60.0, width: 60.0,),
+                              SizedBox(height: 6.0,),
+                              Text("Camera", style: TextStyle(fontSize: 15.0),)
+                            ],
+                          ),
+                        ),
+                        FlatButton(
+                          onPressed: () {
+                            _getImageFromGallery4();
+                            Navigator.pop(context);
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Image.asset("assets/images/image_gallery.png", height: 60.0, width: 60.0,),
+                              SizedBox(height: 6.0,),
+                              Text("Gallery", style: TextStyle(fontSize: 15.0),)
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
+              ),
+            ),
+          );
+        }
+    );
+  }
+
   Future<void> _getImageFromCamera1() async {
     final picker = ImagePicker();
     final _image = await picker.getImage(source: ImageSource.camera);
@@ -650,11 +845,22 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
     setState(() => _imageFile3 = File(_image.path));
   }
 
+  Future<void> _getImageFromCamera4() async {
+    final picker = ImagePicker();
+    final _image = await picker.getImage(source: ImageSource.camera);
+    setState(() => _imageFile4 = File(_image.path));
+  }
+
+  Future<void> _getImageFromGallery4() async {
+    final picker = ImagePicker();
+    final _image = await picker.getImage(source: ImageSource.gallery);
+    setState(() => _imageFile4 = File(_image.path));
+  }
+
 
   Future _fetchDataFromDB() async {
 
     FirebaseDatabase databaseReference = FirebaseDatabase.instance;
-    databaseReference.setPersistenceEnabled(true);
     prefs = await SharedPreferences.getInstance();
 
     databaseReference.reference().child("profile_info").child(_riderId).once().then((DataSnapshot dataSnapshot) {
@@ -719,12 +925,14 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
       "businessOrAgencyName" : _agencyName,
       "vehicleType" : _vehicle,
       "agencyPercentage" : _percentage,
-      "agencyId" : prefs.getString("currentUser")
+      "agencyId" : prefs.getString("currentUser"),
+      "guarantorName" : _fullNameG,
+      "guarantorPhone" : _phoneG,
+      "guarantorID" : _imageFourString,
     }).then((value) {
       setState(() => _isLoading = false);
-      toastMessage("Success");
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-        builder: (BuildContext context) => HomePageAgent(),
+        builder: (BuildContext context) => RiderVerificationSuccessfull(),
       ), (route) => false,
       );
     });
@@ -735,22 +943,31 @@ class _RegisterNewRiderState extends State<RegisterNewRider> {
     String fileName1 = basename(_imageFile1.path);
     String fileName2 = basename(_imageFile2.path);
     String fileName3 = basename(_imageFile3.path);
+    String fileName4 = basename(_imageFile4.path);
 
     StorageReference firebaseStorageRef1 = FirebaseStorage.instance.ref().child('identities/$fileName1');
     StorageReference firebaseStorageRef2 = FirebaseStorage.instance.ref().child('identities/$fileName2');
     StorageReference firebaseStorageRef3 = FirebaseStorage.instance.ref().child('identities/$fileName3');
+    StorageReference firebaseStorageRef4 = FirebaseStorage.instance.ref().child('identities/$fileName4');
 
     StorageUploadTask uploadTask = firebaseStorageRef1.putFile(_imageFile1);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     taskSnapshot.ref.getDownloadURL().then((value) {
       setState(() => _imageOneString = value);
     });
+
     StorageUploadTask uploadTask2 = firebaseStorageRef2.putFile(_imageFile2);
     StorageTaskSnapshot taskSnapshot2 = await uploadTask2.onComplete;
     taskSnapshot2.ref.getDownloadURL().then((value) {
-
       setState(() => _imageTwoString = value);
     });
+
+    StorageUploadTask uploadTask4 = firebaseStorageRef4.putFile(_imageFile4);
+    StorageTaskSnapshot taskSnapshot4 = await uploadTask4.onComplete;
+    taskSnapshot4.ref.getDownloadURL().then((value) {
+      setState(() => _imageFourString = value);
+    });
+
     StorageUploadTask uploadTask3 = firebaseStorageRef3.putFile(_imageFile3);
     StorageTaskSnapshot taskSnapshot3 = await uploadTask3.onComplete;
     taskSnapshot3.ref.getDownloadURL().then((value) {
