@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primaryColor: colorPrimaryRed,
             accentColor: colorWhite,
+            primarySwatch: Colors.blue,
           ),
           home: AnimatedSplashScreen(
             duration: (3000),
